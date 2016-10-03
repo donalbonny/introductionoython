@@ -1,0 +1,33 @@
+Class 2
+Vocabulary:
+
+bit
+byte
+nibble
+word
+
+data
+instruction
+address
+
+claude shannon: father of the digital age
+https://en.wikipedia.org/wiki/Claude_Shannon
+
+
+key points: all information in a modern digital computer is data, instructions, and addresses. the processor unit that we do most of our data analytics on is the central processing unit. in the programming that we will be doing, we will be mostly concerned with how computer memory, or RAM, and the CPU handle digital information as we process our datasets.
+
+all information in a modern digital computer is made up of discrete units that we call bits. physically, bits are differences in voltage potential, magnetic potential, or light pulses. a bit can occupy only one of two states at a time; and these states can represent off or on, zero or one; false or true.
+
+because this information is made up of discrete units that can occupy only two states, we refer to it as binary information.
+
+a modern digital computer uses three kinds of information to work: data (such as the data in datasets), instructions (which tell the computer what to do to the data), and addresses (the starting locations in mass-storage devices or ram of the data and the instructions).
+
+this information is processed as voltage potentials in semiconducting modules made up of millions of transistors that are called — perhaps circularly — processor units. your laptop has many processor units. the most modest ones are microcontrollers —- there is a microcontroller embedded in your hard drive. more powerful processor units control the video graphics in your laptop —- these are called GPUs, or graphical processing units. and the processor unit that handles most programs that run on your laptop is the CPU, or central processing unit.
+
+in older digital computers, the CPU had only one core of transistors to process information. almost all digital computers made today are manufactured with multiple cores. each core has roughly the computational power of a single-core CPU. manufacturing CPUs with multiple cores allows the CPUs to run several tasks simultaneously, or to split a single large or complex task into sub-tasks, each of which then gets assigned to a different core in order to complete the large or complex task more quickly than if a single core had to do all the work.
+
+parallelization is the process of breaking large or complex tasks into sub-tasks, the distributing the sub-tasks across cores or even different computers to solve. unfortunately, not all large or complex tasks can be parallelized.
+
+in a laptop, the CPU is the unit that does most of the data processing of research datasets (while the GPUs handle most of the graphical rendering of your data). all of the processor units work in a confederation designed to make your computer run as fast and efficiently as possible.
+
+there are variations on this basic hardware model. a research lab today can buy a desktop with 24 GPUs installed to tackle data analytic problems that can be high parallelized, such as sequencing or protein docking. computers can also be joined together into clusters, where all of their GPUs or CPUs work together to solve large problems. each computer in a cluster is called a ‘node’.

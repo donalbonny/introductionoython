@@ -1,0 +1,100 @@
+Class 9
+# we can create and instantiate variables in a bash session
+# here, we create the variable FILE and set its value to a string
+# that is the absolute path to the file ‘american-english’
+  205  FILE=/usr/share/dict/american-english
+# this echo statement returns the value of the variable
+  206  echo $FILE
+# now let’s use it. cat-ing the dictionary file shows us that it’s just a file of
+# words, one word to a line. that perfect for experimenting with egrep
+  207  cat $FILE
+# note that when we use egrep with string literals, most of the time we don’t
+# have to put the string literal in quotes; however, we must put regular expressions
+# in double-quotes
+  208  egrep "cat" $FILE
+  209  egrep "cat" $FILE | less
+# now we anchor ‘cat’ to the beginning of the line
+  210  egrep "^cat" $FILE
+# now we anchor it to the end of the line
+  211  egrep "cat$" $FILE
+# the dot (.) is a metacharacter that matches to all characters except the
+# newline character
+  212  egrep "ca.t" $FILE
+# parentheses are the grouping metacharacters. in this instance, we want all hits
+# returned that match the pattern ‘ca’ appearing two or more times consecutively:
+# eg, ‘caca’ or ‘cacaca’ or ‘cacacaca’, etc.
+  213  egrep "(ca){2,}" $FILE
+  214  egrep "$" $FILE
+# i still haven’t figured out why this regex behaves the way it does
+  215  egrep "\$" $FILE
+# this is the regex for a blank line (newline inserted at the beginning of the line)
+  216  egrep "^$" $FILE
+# pattern to match: cat or kat
+  217  egrep "(c|k)at" $FILE
+  218  egrep "(c|k)at" $FILE | less
+  219  egrep "ca+t" $FILE | less
+# pattern to match: val, vaal, vaaal, etc.
+  220  egrep "va+l" $FILE | less
+  221  egrep "(va)+" $FILE | less
+# pattern to match: na, nana, nanana, etc.
+  222  egrep "(na)+" $FILE | less
+
+# remember in class that a couple of these regexes threw me with their output
+# a point i forgot to make in class is that running a regex against a dictionary file
+# lets you test it to see if it matches expected matches.
+  223  egrep "b*(na)+" $FILE | less
+  224  egrep "b.+(na)+" $FILE | less
+# here we finally matched ‘banana’. this regex was built to be very restrictive.
+  225  egrep "^b.+(na){2,}" $FILE | less
+  226  ls
+# ok, let’s make a directory to hold our datafiles
+  227  mkdir datafile
+
+  229  cd datafile/
+# notice that the second argument is the tilde (~), which is the shortcut
+# for home directory
+  230  mv reformatted_Unigene.fa ~
+  231  cd
+  232  ls
+# remember that the mv command is also used to rename files
+
+  233  mv reformatted_Unigene.fa datafile/
+# now let’s set the value of the FILE variable to the relative path to our
+# reformatted fasta file
+  234  FILE=datafile/reformatted_Unigene.fa
+# we’ll start with a literal string
+  235  egrep "GATTACA" $FILE
+# and now let’s see how many records match the pattern one or more times
+# consecutively
+  236  egrep "(GATTACA)+" $FILE | wc
+# the -c option returns the count, as well
+  237  egrep -c "(GATTACA)+" $FILE
+  238  egrep "(GATTACA)+" $FILE
+# return records that match the pattern two or more times consecutively
+  239  egrep "(GATTACA){2,}" $FILE
+# only one record contains GATTACAGATTACA
+  240  egrep "(GATTACA){2,}" $FILE | wc
+# agrep is another tool in the grep family. it allows approximate matches to patterns
+# it matches strings that are exactly like the pattern, but also strings that vary
+# from the pattern by insertions, deletions, and substitutions
+# the default cost of an insertion, deletion, or substitution is 1.
+# in the statement below, we allow for an approximate match of exactly one deletion,
+# as we have set the ‘cost’ for insertions and substitutions too high
+  242  agrep -1 -I2 -S2 GATTACAGATTACA $FILE
+# we pipe the output to egrep to color matches to one part of the matching string
+# this makes it easier for us to see the approximate matches in the
+# nucleotide strings
+  243  agrep -1 -I2 -S2 GATTACAGATTACA $FILE | egrep GATTACA
+# here we allow for up to two deletions (insertions and substitutions are still too
+# expensive
+  244  agrep -2 -I3 -S3 GATTACAGATTACA $FILE | egrep GATTACA
+# now we experiment with regular expressions against our fasta file
+# note that some statements are functionally equivalent; that is, they yield the same
+# result
+  245  egrep "[AT]GATTACA" $FILE
+  246  egrep "[^AT]GATTACA" $FILE
+  247  egrep "[^ACGT]{6,}" $FILE
+  248  egrep "[^ACGT]{16,}" $FILE
+  249  egrep "(T|A)(A|T)GATTACA" $FILE
+  250  egrep "(A|T){2,}GATTACA" $FILE
+

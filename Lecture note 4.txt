@@ -1,0 +1,117 @@
+Class 4 Lecture notes
+
+alan turing is commonly known for his bombes used to decipher enigma messages during wwii; however, his greater contribution to computer science is his mathematical description of the limits of what an idealized computer can and cannot do. today we call that idealized computer ‘a turing machine’:
+https://en.wikipedia.org/wiki/Turing_machine
+
+turing’s bombes weren’t even the greatest technological achievement by the british in cracking nazi codes.
+colossus is the world’s first electronic computer (no moving parts), as well as one of great britain’s best-kept secrets of world war ii:
+https://en.wikipedia.org/wiki/Colossus_computer
+
+eniac (u.s.) was believed for years to be the world’s first electronic computer simply because the british could not divulge the secret of colossus for as long as the soviets continued to use the lorenz machines to send diplomatic cables from russian embassies to the kremlin, which they continued to do for as long as the machines functioned (well into the 1980s):
+https://en.wikipedia.org/wiki/ENIAC
+https://en.wikipedia.org/wiki/Lorenz_cipher
+
+the inventors of the eniac went on to invent EDVAC, a computer that stored data and programs in the same memory, which is what all modern digital computers do:
+https://en.wikipedia.org/wiki/EDVAC
+
+the inventors lost their patent fight over the innovations of EDVAC because johann von neumann published a paper describing those innovations, ‘first draft report on the edvac’. to add insult to injury, thanks to the paper people author with inventor and referred to the design innovations of the EDVAC as the ‘von neumann architecture’
+https://en.wikipedia.org/wiki/First_Draft_of_a_Report_on_the_EDVAC
+https://en.wikipedia.org/wiki/Von_Neumann_architecture
+
+(in fairness to von neumann, there is no evidence that he attempted any sort of intellectual deceit. the architecture became known as ‘the von neumann architecture’ only because his was the first paper to describe it.)
+
+the inventor of the compiler is grace hopper:
+https://en.wikipedia.org/wiki/Grace_Hopper
+
+the world’s first programmer is lady ada lovelace, daughter of lord byron:
+https://en.wikipedia.org/wiki/Ada_Lovelace
+
+lady ada wrote programs for a computer that was never built (it proved too expensive to do so at the time it was conceived) — charles babbage’s analytic engine:
+https://en.wikipedia.org/wiki/Analytical_Engine
+https://en.wikipedia.org/wiki/Ada_Lovelace
+
+lady ada wrote the programs using only babbage’s detailed descriptions of his machine as her guide. in other words, she wrote programs for a machine that she could neither see nor touch, but only imagine (imagine that!).
+
+in the 1990s the london science museum built a fully-functioning model of babbage’s analytic engine; and as i remember, successfully ran lady ada’s programs on it; and in doing so proved their correctness.
+
+
+# we can download web-accessible content from the command line using the wget command
+# another command called ‘curl’ can do the same thing. curl is bundled with mac osx.
+wget w3.biosci.utexas.edu/james/datafile/reformatted_Unigene.fa
+
+# challenge: what is the one thing i forgot to have us do once we downloaded our datafile?
+# what is the one thing we should ALWAYS do to our exemplar datafiles?
+
+# once we get the file, we can get basic attributes about it, like its size in bytes.
+ls -l reformatted_Unigene.fa
+
+# too often, the information that our computers report back to us is simply too large  # or dense to make sense at a glance. numbers like the size of this file in bytes are # a good example. fortunately, many of our bash commands that give us information
+# have a ‘-h’ option (‘h’ for human-readable)
+
+so:
+ls -l reformatted_Unigene.fa
+returns:
+-rw-rw-r-- 1 james james 79286242 Jan 26  2014 reformatted_Unigene.fa
+while:
+ls -lh reformatted_Unigene.fa # notice the h
+returns:
+-rw-rw-r-- 1 james james 76M Jan 26  2014 reformatted_Unigene.fa
+
+# we can have linux report the file type with the ‘file’ command:
+file reformatted_Unigene.fa
+
+# and the unfortunately named ‘wc’ command returns line count, word count,
+# and byte count
+wc reformatted_Unigene.fa
+
+# return to STDOUT the first 10 lines of the file:
+head reformatted_Unigene.fa
+
+# get just the first line and pipe it to cat -vet so we can see all the whitespace
+# characters in that line
+head -1 reformatted_Unigene.fa |cat -vet
+
+# pipelining bash commands is common practice.
+# a pipe (|) allows us to send the output of one command as input to the next command
+# we will be doing a lot of pipelining in class
+
+# datafiles often have column names and metadata written at the top.
+# not in the instance of our reformatted_Unigene fasta file.
+# inserted into the top may be column names and metadata (data about the file contents —
+# perhaps the file author writes info like her name and a time/date stamp into the
+# file so that its provenance can be easily established.
+# we will look at how to insert metadata, as well as how to remove it
+# (we need to clean the file before we can process the data in it)
+
+# now let’s look at the last 10 lines of the file
+tail reformatted_Unigene.fa
+
+# note that while researchers can append metadata to the bottoms of their datafiles,
+# that is not common practice, as far as i know.
+
+# the grep family of commands are search tools based on the old and venerable command
+# ’grep’. i prefer egrep:
+head reformatted_Unigene.fa | egrep CAT # pipe the first 10 lines of the file to egrep
+# search for the pattern CAT and return matches
+
+# find how many records have the pattern GATTACA in their data
+# -c, --count:  print a count of matching lines for each input file.
+# With the -v, —-invert-match option, count non-matching lines.
+cat reformatted_Unigene.fa | egrep -c GATTACA
+# so -c returns the count of records that contain strings that match the pattern,
+# while -v returns the count of records that DON’T contain strings that match.
+
+# here we’ve piped the output to wc, and the line count matches the output of egrep -c
+cat reformatted_Unigene.fa | egrep GATTACA | wc
+
+# challenge:
+# often we want to extract the records that contain matching criteria
+# let’s say that we want to extract from reformatted_Unigene.fa all records whose data
+# contain the string GATTACA and save them to a file for further processing.
+# how can we modify our pipeline to do that?
+
+# the word count of our file is 27804. in this context, a word is a string bounded by
+# whitespace characters. we noted that each record holds seven columns. this means that
+# whatever the word count of the file is, that count should have 7 as a factor
+factor 27804
+# and indeed it does

@@ -1,0 +1,25 @@
+class notes
+# the default text editor for python is vim 
+%edit myModule.py
+#in the file called 'myModule.py, we created a test function called ' printHelloWorld()'
+# when everything works right. these next two lines will load into session memory the contents of the module we have imported and are editing ( in other words, they'll load the edits we make on the modles into session memorey, letting us use and tets them out immediately.
+# ( note: need to put shebang in the first line of the text file : #! opt/anaconda/bin
+%load_ext autoreload
+autoreload 2
+# 'import makes available to us the function and static variables and ADTs in a module or library
+import myModule as mM
+# now we call our function 
+mM.printHelloWorld()
+# printHelloWorld() is a function, therefore to invoke a function, we must include the parentheses()
+# even if the function does not take any arguments
+# If we follow  best practices and documents our code, then using the question on our function returns the info we're provided in the function's docstring. 
+mM.printHelloWorld?
+# the same is true of our modules provided we're documented them using docstrings.
+mM?
+## we've learned how to write our python code to text files using python modules. Now that we are writing our code to files, how to document our code and make it readable. 
+# This is vital for making our code maintainable.
+#modules let us write our code once, run it in many different scripts ( and sessions)
+# The way we are using modules, they must be in our working directory for us to import them
+# we run our python files through pylint to check our errors in our code, as well as to check whether our code follows standard python styles.
+# Among the other things we covered in writing python code, we learned that following the function design recipe ensures that our functions are well-documented and we learned that as a matter of good style and readibility, we break up long lines of code into lengths of ~80 characters, a python statement can e broken over several lines by uses of the backslash (\)
+

@@ -1,0 +1,70 @@
+Class 3
+
+# let’s start by creating an empty file
+touch test.txt # all this does is record the filename and file’s starting address on the hard drive; then at that starting address, write an end-of-file (EOF) marker
+
+# ls -l gives us the long listing format for files and directories
+ls -l test.txt # here, we say we want to see the listing only for test.txt
+
+# the basic linux security model defines read-write-execute permissions on files and folders for owner, group, and world
+# we use the chmod command with two arguments: the first defines read-write-execute permissions for owner, group, and world,
+# while the second is the name of the folder or file whose permissions we are setting
+# 4, read: 2: write, 1: execute
+chmod 444 test.txt # this sets permissions on the file test.txt to read-only for owner, group, and world
+
+# we can verify the change of permissions:
+ls -l test.txt
+
+# let’s set permissions back to read-write for owner and group:
+chmod 664 test.txt # 6=4 for read + 2 for write
+
+# a bash session has many configuration options. these options are used to set up a bash session before a terminal window is presented to the user.
+# three of these options are STDIN, STDOUT, and STDERR, which stand for standard-in, standard-out, and standard-error of a session.
+# default standard input device is the keyboard, default standard output device is the terminal window, and the default standard output for errors is
+# the terminal window.
+
+echo 'hello, world!' # because STDOUT is the terminal window, echo simply echoes the string to the terminal window
+
+# bash has uses ‘<‘, and ‘>’ as redirection operators. we can use ‘>’ to redirect output to a file.
+echo 'hello, world!' > test.txt # this writes the string ‘hello, world!’ to the file test.txt
+
+# the cat command with just one filename as an argument reads the contents of that file to STDOUT
+cat test.txt
+
+# this writes a new string to the file
+echo 'good-bye, cruel world!' > test.txt
+
+cat test.txt # we see that we have overwritten the contents of the file
+
+# accidentally overwriting the contents of a file is known as ‘clobbering the file’.
+# there are ways to keep us from clobbering our files (especially importing when dealing with scripts and datafiles!)
+# one way is to remove the write bit from files we want to protect with the chmod command
+
+# when we want to append to the existing contents of a file, we use double redirect operator ‘>>’
+echo 'good-bye, cruel world!' >> test.txt
+
+# often we want to see the whitespace characters embedded in strings:
+# e.g., we want to know ’is it a space, or a tab?’
+# because whitespace characters can be used as field separators in a datafile, this is an important question
+# the cat command with the -vet option shows us the normally hidden whitespace characters
+cat -vet test.txt # the cat vet sees all!
+
+# we can embed whitespace characters into a string argument in an echo statement by using the -e option:
+echo -e 'good-bye,\t cruel world!' >> test.txt 
+
+cat test.txt 
+cat -vet test.txt # now we see that a tab is represented by ^I, and a linefeed is represented by $
+
+# when we make a file read-only with the chmod command, we protect it from getting clobbered; but now not only can we not write to the file,
+# we also can’t append to it, either
+
+# fortunately, we can set a bash session option that allows us to append to files while preventing us from overwriting them:
+set -o noclobber # set the noclobber option
+
+echo 'bye-bye' > test.txt
+echo 'bye-bye' >> test.txt
+cat test.txt
+
+# we can reset the noclobber option in a bash session
+set +o noclob
+

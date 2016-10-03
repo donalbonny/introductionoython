@@ -1,0 +1,137 @@
+Gedit : official text editor
+Ps: why should we caresearch processed 
+Terminate a process: kill job IDs 
+Open gedit &
+man –command ( for help)
+python cant run multiple core natively/
+tty: 
+
+I/O is expensive. I/O means ‘input/output’; and the statement means that moving data to or from devices like our hard drives or monitors takes time and cpu cycles that can seriously slow down our data analytics programs. therefore, we design our programs to access them as infrequently as possible. to make the run time of our program as fast as possible, we may want to read all our data into RAM at the start, and write out results to the hard drive only at the end.
+
+latency: a time interval between when we initiate an action and it actually happens.
+examples of large, common latencies include the time interval from when we launch a program (like firefox or microsoft word) to when the program is ready to use.
+
+for a program to run, a copy of it must first be loaded into system memory, or RAM.
+
+it’s important to know that good programming practice in unix/linux is for a program to report nothing while it’s running as long as everything is going ok. this means that when you run a program on the command line, it is normal not to get any messages from the program or operating system as long as everything is running ok.
+
+for large data runs, our terminal or even our machine may appear unresponsive, and yet everything is good.
+
+by design, unix/linux reports only when something has gone wrong.
+
+when we are developing programs, we make coding mistakes or run our programs when they have ‘features’ that we didn’t intend, like infinite loops. (an unintentional infinite loop will make a program literally run in circles forever, in which case we have to manually kill the program).
+
+this means that developing programs requires us to develop a sense that lets us discriminate between crashed programs and programs that are simply taking a long time to process our datasets. we certainly don’t want to kill our programs or reboot our computers in the middle of a long run (and lose our work as a result) on the mistaken belief that our program or computer has crashed.
+
+(one thing that we can do to help ourselves is to use a small subset of our dataset when developing our programs, one small enough that we know it should take just a second or two to process)
+
+it is in fact a common beginner’s mistake to test programs in development against an entire dataset. avoid the temptation.
+
+take-home lessons: developing software takes patience, especially when running software in development. resist the temptation to become kill- or reboot-happy. use a small subset of your data as test data while developing your software.
+
+by design, every copy of unix/linux is a multi-user operating system (this means designed so several users can use the computer at the same time). we have 7 terminal sessions available to us (tty7 holds the graphical window interface). we can use all the terminal sessions to run separate, independent programs; or we can use one terminal session to do our data run and another terminal session to monitor the system and perhaps do other tasks.
+
+tty means 'teletype' --- in the 1960s and through the 70s users connected to miniframes and mainframes by means of electromechanical typewriters on which they would type to paper at least one statement (one line of type), their keystrokes would be converted to electrical pulses that would be sent by wire to the computer, which would process the statement then send its response by electrical pulses to the teletype station, where it would be typed out on the paper on the next line (plus a line feed, to prepare for the next statement from the user). back then, our 'displays' were paper! of course we don't use teletypes today, but the jargon and some of the best practices from those days persist --- like the computer's not reporting anything while executing a program, unless something goes wrong.
+
+when you are doing a compute-intensive data run, consider killing your graphical window before you start. graphical user interfaces are expensive in memory and CPU cycles. you may want to devote that memory and those cycles to something more important — processing your data set.
+
+# let’s open a secure shell (ssh) to the stampede supercomputer
+ssh jderry@stampede.tacc.utexas.edu
+# don’t forget that logging in now uses two-factor authentication
+
+# let’s clear the screen of clutter
+clear
+
+# ps means ‘process’. ps -A returns the PID (process ID) and name of all processes in RAM
+ps -A
+# too much information is returned to STDOUT to be held in one screen.
+# of course. look: even in a fresh session, thousands of processes occupy RAM
+
+# let’s pipe the output of ps -A to the program ‘less’.
+# less feeds STDOUT just one screenful of output at a time.
+# we press the spacebar to go to the next screenful of output,
+# we press p to go to the previous screenful;
+# and we press q to quit
+ps -A | less
+
+# we can launch graphical programs off the command line
+# gedit is a graphical text editor
+gedit
+# note that our terminal session is tied to gedit.
+# we won’t get back control of the terminal until we kill gedit
+
+# to launch a process and return control of the terminal to us,
+# we follow the process name with an ampersand (&)
+gedit &
+
+# if we are searching for a line of output, we can pipe the output of a command to egrep
+ps -A | egrep gedi
+# here we use the partial name of gedit as our search string
+
+# we can kill a running process…
+kill gedit
+# but not by its name
+
+# rather, we use the process’s PID
+kill 4064
+
+# if we have to kill a process, we should always try to kill it nicely
+# the default for kill is to kill a process nicely
+# killing a process nicely means flushing its buffers, writing its output to disk, etc.
+# when we shutdown our computers, the operating system tries to shut down all processes nicely
+# to minimize loss of data and to ensure processes and data on the hard drive aren’t corrupted
+
+# take-home lesson: always try to shut down or reboot your computers
+# through the operating system’s shutdown or reboot commands.
+# use hard reboot (holding down the power button for 5 seconds or the equivalent)
+# only as a last resort
+
+# let’s relaunch gedit…
+gedit &
+
+# and now let’s assume that it doesn’t respond to our attempts to kill it nicely
+# the -9 option means kill as un-nicely as possible — if the program is holding any data
+# in memory, we lose it using this option
+kill -9 4084
+
+# to read more on the bash software tools, you can google them
+# or you can read the man pages
+man kill
+
+# some processes have a —-help option
+# we can get a terse summary of options with the -? option
+# this is good for when we’re familiar with the program, and just need our memory jogged
+# on what’s available
+kill -?
+
+# to monitor running processes, we use the top command
+top
+# type q to quit
+
+# linux gives us 7 tty sessions. if we think our graphical window manager has crashed,
+# we can jump to another tty, log in; and restart the manager
+sudo service lightdm restart
+
+# we can also stop the service. graphical interfaces are memory and CPU-cycle hogs
+# by stopping the service, we free up memory and CPU-cycles for compute-intensive
+# data analytics on our datasets
+sudo service lightdm stop
+
+# we can also kill a runaway or crashed process from another tty session
+ps -A | egrep gedit
+kill 4750
+
+# note that because linux is a multi-user operating system, when we send the shutdown signal
+# to the OS, it informs users on all the tty sessions
+sudo shutdown -r 1
+# if you ever get a shutdown warning, immediately save all your work
+
+# when most variants of linux shut down, they don’t actually power off
+# rather, they drop into the lowest run level, which is the single-user run level
+# this is so that the sys admin can then do whatever maintenance is necessary
+# to fix the problem that forced the shut down.
+shutdown now
+
+# note that sys admins and programmers often co-exist on a system in an uneasily alliance
+# sys admins often know just enough programming to be dangerous,
+# while programmers often know just enough system administration to be dangerous
